@@ -16,13 +16,14 @@
 $router->get('/', function () use ($router) {
     echo "<center> welcome </center>";
 });
-// $router->get('/', "Modules\App\App\Http\Controllers\TestModuleController@index");
 
-// $router->get('/version', function () use ($router) {
-//     return $router->app->version();
-// });
-// $router// Route::post('logout', 'AuthController@logout');
 
-// Route::post('logout', 'AuthController@logout');
-// Route::post('refresh', 'AuthController@refresh');
-// Route::post('user-profile', 'AuthController@me');
+$router->group([
+    "namespace" => "App\Http\Controllers"
+], function () use ($router) {
+    $router->post('login', 'AuthController@login');
+    $router->post('logout', 'AuthController@logout');
+    $router->post('refresh', 'AuthController@refresh');
+    $router->get('register', 'AuthController@register');
+    $router->post('me', 'AuthController@me');
+});

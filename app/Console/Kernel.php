@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\ServeCommand::class,
+        \App\Console\Commands\ResourceCommand::class,
     ];
 
     /**

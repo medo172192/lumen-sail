@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use  App\Models\User;
+use App\Models\User;
+// Logic
+use  App\Logic\Auth\registerLogic;
 
 class AuthController extends Controller
 {
@@ -12,17 +14,16 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'refresh', 'logout']]);
+        $this->middleware('auth:api', ['except' => ['login', 'refresh', 'logout' , 'register']]);
     }
     /**
      * Get a JWT via given credentials.
      *
      * @param  Request  $request
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
-
         $this->validate($request, [
             'email' => 'required|string',
             'password' => 'required|string',
@@ -31,7 +32,7 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return responseError("Unauthorized",401);
         }
 
         return $this->respondWithToken($token);
@@ -44,7 +45,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return responseSuccess(auth()->user());
     }
 
     /**
@@ -55,8 +56,21 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
+        return responseSuccess("Successfully logged out");
+    }
 
-        return response()->json(['message' => 'Successfully logged out']);
+    /**
+     * register new account
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(Request $request)
+    {
+        return registerLogic::request($request,$this)
+        ->validation()
+        ->prepare()
+        ->register()
+        ->response();
     }
 
     /**
@@ -78,7 +92,7 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return responseSuccess("authorized",[
             'access_token' => $token,
             'token_type' => 'bearer',
             'user' => auth()->user(),

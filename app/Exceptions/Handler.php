@@ -53,11 +53,10 @@ class Handler extends ExceptionHandler
         if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             return responseError("page not found",404);
         }elseif($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
-            return responseError("Method Not Support Current Route !",404);
+            return responseError("Method Not Support Current Route !",401);
         }else{
-            return responseError("server exception",$exception->getStatusCode(),$exception??[]);
+            return parent::render($request, $exception);
         }
-        // return parent::render($request, $exception);
             
     }
 }

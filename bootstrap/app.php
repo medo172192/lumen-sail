@@ -140,6 +140,7 @@ $app->router->group([
     require __DIR__.'/../routes/admin.php';
 });
 
+// Load Modules Router 
 (new App\Services\Modules\Routes\mapRoutes)->load($app);
 
 return $app;

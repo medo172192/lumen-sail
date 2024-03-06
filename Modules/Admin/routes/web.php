@@ -11,8 +11,8 @@
 |
 */
 
-$router->group([
-    "namespace" => "Modules\Admin\App\Http\Controllers"
-],function($route){
-    $route->get("/admin","AdminController@index");
-});
+// $router->group([
+//     "namespace" => "Modules\Admin\App\Http\Controllers"
+// ],function($route){
+//     $route->get("/","AdminController@index");
+// });
